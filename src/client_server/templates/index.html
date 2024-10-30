@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Service</title>
+</head>
+<body>
+    <h1>Buy Item</h1>
+    <form action="/buy" method="post">
+        <input type="text" name="item" placeholder="Enter item" required>
+        <button type="submit">Buy</button>
+    </form>
+    <h2>All Purchased Items</h2>
+    <button onclick="getAllItems()">Get All Items</button>
+    <ul id="item-list"></ul>
+
+    <script>
+        async function getAllItems() {
+            const response = await fetch('/getAllBoughtItems');
+            const items = await response.json();
+            const itemList = document.getElementById('item-list');
+            itemList.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.item;
+                itemList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
