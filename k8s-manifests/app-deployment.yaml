@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-client-servers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-client-servers
+  template:
+    metadata:
+      labels:
+        app: api-client-servers
+    spec:
+      containers:
+      - name: api-client-servers
+        image: devopsgoofy/kafka-python:latest
+        ports:
+        - containerPort: 5000
+        - containerPort: 5001
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb:27017/"
+        - name: KAFKA_URI
+          value: "kafka:9092"

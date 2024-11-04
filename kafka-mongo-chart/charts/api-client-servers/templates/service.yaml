@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "api-client-servers.fullname" . }}
+  labels:
+    {{- include "api-client-servers.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: api-port
+      protocol: TCP
+      port: {{ .Values.service.ports.api.port }}
+      targetPort: {{ .Values.service.ports.api.targetPort }}
+      nodePort: {{ .Values.service.ports.api.nodePort }}
+    - name: client-port
+      protocol: TCP
+      port: {{ .Values.service.ports.client.port }}
+      targetPort: {{ .Values.service.ports.client.targetPort }}
+      nodePort: {{ .Values.service.ports.client.nodePort }}
+  selector:
+    {{- include "api-client-servers.selectorLabels" . | nindent 4 }}
