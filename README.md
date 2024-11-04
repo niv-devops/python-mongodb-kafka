@@ -1,6 +1,6 @@
 # Python - MongoDB project using Apache Kafka
 
-A simple purchase service that allows users to buy items and check all purchased items. This project uses Python for the API and client servers, MongoDB for data storage, Kafka for messaging, and Kubernetes for orchestration.
+A simple purchase service that allows users to buy items and check all purchased items. This project uses Python and Flask for the API and client servers, MongoDB for data storage, Kafka and Zookeeper for messaging, and Kubernetes for orchestration. The application is also deployed in a Kubernetes environment using Helm for easy management.
 
 ## Table of Contents
 
@@ -35,6 +35,7 @@ A simple purchase service that allows users to buy items and check all purchased
 - [Docker](https://www.docker.com/get-started)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Helm](https://helm.sh/docs/intro/install/)
 
 ### Setting Up the Environment
 
@@ -80,6 +81,24 @@ This project deploys the following services in the `python-mongodb` namespace:
 - **Kafka**: Handles messaging between services.
 - **API Server**: Provides endpoints for buying items and retrieving purchase history.
 - **Client Server**: User interface for interacting with the purchase service.
+
+1. **Deploy using Helm**:
+
+   Navigate to the main chart directory and install the application:
+
+   ```bash
+   helm install my-project ./ --namespace python-mongodb --create-namespace
+   ```
+
+2. **Verify the deployment**:
+
+   Check the status of the deployed services:
+
+   ```bash
+   helm status my-project --namespace python-mongodb
+   kubectl get pods -n python-mongodb
+   kubectl get svc -n python-mongodb
+   ```
 
 ## Usage
 
