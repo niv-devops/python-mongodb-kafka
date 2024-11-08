@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #002244, #fc4c02);
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }      
+        .container {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            width: 300px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }     
+        img {
+            max-width: 35%;
+            height: auto;
+        }    
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #002244;
+        }     
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #002244;
+        }     
+        button {
+            background: linear-gradient(to right, #fc4c02, #002244);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }     
+        button:hover {
+            background: linear-gradient(to right, #002244, #fc4c02);
+        }     
+        .error {
+            color: #fc4c02;
+            background-color: #002244;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <img src="https://s.yimg.com/cv/apiv2/default/nfl/20190724/500x500/2019_DEN_wbg.png" alt="Denver_Broncos" style="width: 300px; height: auto;">
+    <div class="container">
+        <form id="loginForm" method="POST" action="/">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="button">Login</button>
+        </form>
+        {% if loginError %}
+        <div class="error">{{ loginError }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

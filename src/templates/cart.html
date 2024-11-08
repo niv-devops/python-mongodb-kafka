@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #002244, #fc4c02);
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .welcome {
+            font-size: 1.2em;
+            color: #002244;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            color: #002244;
+        }
+        th {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        td {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        button {
+            background: linear-gradient(to right, #fc4c02, #002244);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(to right, #002244, #fc4c02);
+        }
+        .total-price {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .logout-button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .view-cart-button {
+            background: linear-gradient(to right, #fc4c02, #002244);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+        .view-cart-button:hover {
+            background: linear-gradient(to right, #002244, #fc4c02);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p class="welcome">🏈 Welcome {{ username }}</p>
+        <form action="{{ url_for('logout') }}" method="POST" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+    <h1>Your Shopping Cart</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.item }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.count }}</td>
+                <td>${{ item.total_price }}</td>
+                <td><button onclick="removeItem('{{ item.item }}')">Remove</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="total-price">
+        <h2>Total Price: ${{ total_price }}</h2>
+    </div>
+    <button onclick="window.location.href='/items'" style="border: 2px solid white;">Continue Shopping</button>
+    <script>
+        function removeItem(itemName) {
+            fetch('/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ item_name: itemName })
+            }).then(response => response.json()).then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    location.reload();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #002244, #fc4c02);
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .welcome {
+            font-size: 1.2em;
+            color: #002244;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .items-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.3);
+            color: #002244;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            backdrop-filter: blur(10px);
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        button {
+            background: linear-gradient(to right, #fc4c02, #002244);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(to right, #002244, #fc4c02);
+        }
+        #notification {
+            display: none;
+            color: white;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .view-cart-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .view-cart-button {
+            background: linear-gradient(to right, #fc4c02, #002244);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+        .view-cart-button:hover {
+            background: linear-gradient(to right, #002244, #fc4c02);
+        }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+        <p class="welcome">🏈 Welcome {{ username }}</p>
+        <form action="/logout" method="POST" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+    <h1>Denver Broncos DevOps Shop</h1>
+    <div class="items-container" id="itemsContainer">
+        {% for item in items %}
+            <div class="item">
+                <h2>{{ item.item }}</h2>
+                <img src="{{ item.image }}" alt="{{ item.item }}">
+                <p>Price: ${{ item.price }}</p>
+                <form method="POST" onsubmit="return buyItem('{{ item.item }}', event);">
+                    <input type="hidden" name="item_name" value="{{ item.item }}">
+                    <button type="submit">Buy</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="notification" style="display: none; color: white; margin-top: 20px;"></div>
+    <button class="button" onclick="window.location.href='/cart'">View Cart</button>
+    <script>
+        function buyItem(itemName, event) {
+            event.preventDefault();
+
+            const button = event.target.querySelector('button');
+            button.disabled = true;
+      
+            fetch('/items', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ item_name: itemName })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                document.getElementById('notification').textContent = data.message;
+                document.getElementById('notification').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Error adding item to cart. Please try again.');
+            })
+            .finally(() => {
+                button.disabled = false;
+            });
+        }
+    </script>        
+  </body>
+</html>

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-server
+  namespace: python-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-server
+  template:
+    metadata:
+      labels:
+        app: client-server
+    spec:
+      containers:
+      - name: client-server
+        image: devopsgoofy/client-server:latest
+        ports:
+        - containerPort: 5001
